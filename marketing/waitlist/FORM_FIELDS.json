@@ -1,0 +1,611 @@
+{
+  "formConfig": {
+    "formId": "ciphervault-beta-waitlist",
+    "version": "1.0",
+    "submitEndpoint": "/api/waitlist/submit",
+    "successRedirect": "/waitlist/confirmation",
+    "errorHandling": "inline"
+  },
+  "fields": [
+    {
+      "id": "org_name",
+      "type": "text",
+      "label": "Organization Name",
+      "placeholder": "Acme Digital Asset Fund",
+      "required": true,
+      "validation": {
+        "minLength": 2,
+        "maxLength": 100,
+        "pattern": "^[a-zA-Z0-9\\s\\-\\.&,]+$"
+      },
+      "errorMessages": {
+        "required": "Organization name is required",
+        "minLength": "Organization name must be at least 2 characters",
+        "pattern": "Please enter a valid organization name"
+      },
+      "helpText": "Legal entity name or DBA"
+    },
+    {
+      "id": "contact_name",
+      "type": "text",
+      "label": "Your Name",
+      "placeholder": "John Smith",
+      "required": true,
+      "validation": {
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "errorMessages": {
+        "required": "Name is required",
+        "minLength": "Name must be at least 2 characters"
+      }
+    },
+    {
+      "id": "email",
+      "type": "email",
+      "label": "Work Email",
+      "placeholder": "john.smith@company.com",
+      "required": true,
+      "validation": {
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        "blacklist": ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "aol.com"]
+      },
+      "errorMessages": {
+        "required": "Work email is required",
+        "pattern": "Please enter a valid email address",
+        "blacklist": "Please use your work email address"
+      },
+      "helpText": "Corporate email required (no personal email providers)"
+    },
+    {
+      "id": "role",
+      "type": "select",
+      "label": "Your Role",
+      "placeholder": "Select your role",
+      "required": true,
+      "options": [
+        {
+          "value": "ceo",
+          "label": "CEO / Founder",
+          "tag": "EXECUTIVE"
+        },
+        {
+          "value": "cto",
+          "label": "CTO / Technical Leader",
+          "tag": "TECHNICAL"
+        },
+        {
+          "value": "cfo",
+          "label": "CFO / Finance Leader",
+          "tag": "FINANCE"
+        },
+        {
+          "value": "compliance_officer",
+          "label": "Compliance Officer / CCO",
+          "tag": "COMPLIANCE"
+        },
+        {
+          "value": "risk_manager",
+          "label": "Risk Manager",
+          "tag": "RISK"
+        },
+        {
+          "value": "treasury_director",
+          "label": "Treasury Director",
+          "tag": "TREASURY"
+        },
+        {
+          "value": "fund_manager",
+          "label": "Fund Manager / Portfolio Manager",
+          "tag": "FUND_MANAGEMENT"
+        },
+        {
+          "value": "operations",
+          "label": "Operations Manager",
+          "tag": "OPERATIONS"
+        },
+        {
+          "value": "other",
+          "label": "Other (please specify)",
+          "tag": "OTHER"
+        }
+      ],
+      "errorMessages": {
+        "required": "Please select your role"
+      }
+    },
+    {
+      "id": "role_other",
+      "type": "text",
+      "label": "Please specify your role",
+      "placeholder": "Head of Digital Assets",
+      "required": false,
+      "conditionalDisplay": {
+        "field": "role",
+        "value": "other"
+      },
+      "validation": {
+        "maxLength": 100
+      }
+    },
+    {
+      "id": "org_type",
+      "type": "select",
+      "label": "Organization Type",
+      "placeholder": "Select organization type",
+      "required": true,
+      "options": [
+        {
+          "value": "crypto_fund",
+          "label": "Crypto Hedge Fund",
+          "tag": "FUND",
+          "priority": "HIGH"
+        },
+        {
+          "value": "traditional_fund",
+          "label": "Traditional Fund (with crypto exposure)",
+          "tag": "FUND",
+          "priority": "HIGH"
+        },
+        {
+          "value": "family_office",
+          "label": "Family Office",
+          "tag": "FUND",
+          "priority": "MEDIUM"
+        },
+        {
+          "value": "custodian",
+          "label": "Digital Asset Custodian",
+          "tag": "CUSTODY",
+          "priority": "HIGH"
+        },
+        {
+          "value": "otc_desk",
+          "label": "OTC Trading Desk",
+          "tag": "OTC",
+          "priority": "HIGH"
+        },
+        {
+          "value": "prime_broker",
+          "label": "Prime Broker",
+          "tag": "PRIME",
+          "priority": "HIGH"
+        },
+        {
+          "value": "corporate_treasury",
+          "label": "Corporate Treasury",
+          "tag": "TREASURY",
+          "priority": "MEDIUM"
+        },
+        {
+          "value": "exchange",
+          "label": "Exchange / Trading Platform",
+          "tag": "EXCHANGE",
+          "priority": "MEDIUM"
+        },
+        {
+          "value": "bank",
+          "label": "Bank / Financial Institution",
+          "tag": "BANK",
+          "priority": "MEDIUM"
+        },
+        {
+          "value": "other",
+          "label": "Other (please specify)",
+          "tag": "OTHER",
+          "priority": "LOW"
+        }
+      ],
+      "errorMessages": {
+        "required": "Please select organization type"
+      }
+    },
+    {
+      "id": "org_type_other",
+      "type": "text",
+      "label": "Please specify organization type",
+      "placeholder": "Digital Asset Service Provider",
+      "required": false,
+      "conditionalDisplay": {
+        "field": "org_type",
+        "value": "other"
+      },
+      "validation": {
+        "maxLength": 100
+      }
+    },
+    {
+      "id": "aum_bracket",
+      "type": "select",
+      "label": "Assets Under Management (or equivalent)",
+      "placeholder": "Select AUM range",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10m",
+          "label": "Under $10M",
+          "tag": "SMALL",
+          "priority": "LOW"
+        },
+        {
+          "value": "10m_50m",
+          "label": "$10M - $50M",
+          "tag": "SMALL",
+          "priority": "MEDIUM"
+        },
+        {
+          "value": "50m_100m",
+          "label": "$50M - $100M",
+          "tag": "MEDIUM",
+          "priority": "MEDIUM"
+        },
+        {
+          "value": "100m_500m",
+          "label": "$100M - $500M",
+          "tag": "MEDIUM",
+          "priority": "HIGH"
+        },
+        {
+          "value": "500m_1b",
+          "label": "$500M - $1B",
+          "tag": "LARGE",
+          "priority": "HIGH"
+        },
+        {
+          "value": "over_1b",
+          "label": "Over $1B",
+          "tag": "ENTERPRISE",
+          "priority": "CRITICAL"
+        },
+        {
+          "value": "not_applicable",
+          "label": "Not Applicable",
+          "tag": "NA",
+          "priority": "LOW"
+        }
+      ],
+      "errorMessages": {
+        "required": "Please select AUM range"
+      },
+      "helpText": "For custodians/service providers: total client assets"
+    },
+    {
+      "id": "compliance_requirements",
+      "type": "multiselect",
+      "label": "Primary Compliance Requirements",
+      "placeholder": "Select all that apply",
+      "required": true,
+      "minSelections": 1,
+      "options": [
+        {
+          "value": "soc2",
+          "label": "SOC2 Type II",
+          "tag": "SOC2"
+        },
+        {
+          "value": "gdpr",
+          "label": "GDPR (European)",
+          "tag": "GDPR"
+        },
+        {
+          "value": "hipaa",
+          "label": "HIPAA (Healthcare)",
+          "tag": "HIPAA"
+        },
+        {
+          "value": "pci_dss",
+          "label": "PCI-DSS (Payment)",
+          "tag": "PCI"
+        },
+        {
+          "value": "sec",
+          "label": "SEC (US Securities)",
+          "tag": "SEC"
+        },
+        {
+          "value": "finra",
+          "label": "FINRA (US Broker-Dealer)",
+          "tag": "FINRA"
+        },
+        {
+          "value": "fca",
+          "label": "FCA (UK Financial)",
+          "tag": "FCA"
+        },
+        {
+          "value": "mifid",
+          "label": "MiFID II (European)",
+          "tag": "MIFID"
+        },
+        {
+          "value": "aml_kyc",
+          "label": "AML/KYC Requirements",
+          "tag": "AML"
+        },
+        {
+          "value": "other",
+          "label": "Other (specify below)",
+          "tag": "OTHER"
+        }
+      ],
+      "errorMessages": {
+        "required": "Please select at least one compliance requirement",
+        "minSelections": "Please select at least one compliance requirement"
+      }
+    },
+    {
+      "id": "compliance_other",
+      "type": "text",
+      "label": "Other compliance requirements",
+      "placeholder": "e.g., CFTC, MAS, JFSA",
+      "required": false,
+      "conditionalDisplay": {
+        "field": "compliance_requirements",
+        "contains": "other"
+      },
+      "validation": {
+        "maxLength": 200
+      }
+    },
+    {
+      "id": "use_case",
+      "type": "textarea",
+      "label": "Primary Use Case",
+      "placeholder": "Describe how you plan to use CipherVault (e.g., fund custody, client segregation, treasury management)",
+      "required": true,
+      "validation": {
+        "minLength": 20,
+        "maxLength": 500
+      },
+      "errorMessages": {
+        "required": "Please describe your use case",
+        "minLength": "Please provide at least 20 characters",
+        "maxLength": "Please keep description under 500 characters"
+      },
+      "helpText": "20-500 characters"
+    },
+    {
+      "id": "timeline",
+      "type": "select",
+      "label": "Implementation Timeline",
+      "placeholder": "When do you need this?",
+      "required": true,
+      "options": [
+        {
+          "value": "immediate",
+          "label": "Immediate (within 30 days)",
+          "priority": "CRITICAL"
+        },
+        {
+          "value": "1_3_months",
+          "label": "1-3 months",
+          "priority": "HIGH"
+        },
+        {
+          "value": "3_6_months",
+          "label": "3-6 months",
+          "priority": "MEDIUM"
+        },
+        {
+          "value": "6_12_months",
+          "label": "6-12 months",
+          "priority": "LOW"
+        },
+        {
+          "value": "exploring",
+          "label": "Just exploring options",
+          "priority": "LOW"
+        }
+      ],
+      "errorMessages": {
+        "required": "Please select implementation timeline"
+      }
+    },
+    {
+      "id": "phone",
+      "type": "tel",
+      "label": "Phone Number (Optional)",
+      "placeholder": "+1 (555) 123-4567",
+      "required": false,
+      "validation": {
+        "pattern": "^\\+?[1-9]\\d{1,14}$"
+      },
+      "errorMessages": {
+        "pattern": "Please enter a valid phone number"
+      },
+      "helpText": "For urgent implementation needs"
+    },
+    {
+      "id": "referral_source",
+      "type": "select",
+      "label": "How did you hear about us?",
+      "placeholder": "Select source",
+      "required": false,
+      "options": [
+        {
+          "value": "linkedin",
+          "label": "LinkedIn"
+        },
+        {
+          "value": "twitter",
+          "label": "Twitter/X"
+        },
+        {
+          "value": "google",
+          "label": "Google Search"
+        },
+        {
+          "value": "referral",
+          "label": "Referral from colleague"
+        },
+        {
+          "value": "conference",
+          "label": "Conference/Event"
+        },
+        {
+          "value": "press",
+          "label": "Press/Media"
+        },
+        {
+          "value": "other",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "id": "consent_marketing",
+      "type": "checkbox",
+      "label": "I agree to receive product updates and compliance insights via email",
+      "required": false,
+      "defaultValue": true,
+      "helpText": "You can unsubscribe at any time"
+    },
+    {
+      "id": "consent_terms",
+      "type": "checkbox",
+      "label": "I agree to the Terms of Service and Privacy Policy",
+      "required": true,
+      "errorMessages": {
+        "required": "You must agree to the terms to continue"
+      },
+      "links": [
+        {
+          "text": "Terms of Service",
+          "url": "/legal/terms"
+        },
+        {
+          "text": "Privacy Policy",
+          "url": "/legal/privacy"
+        }
+      ]
+    }
+  ],
+  "leadTagging": {
+    "autoTags": [
+      {
+        "condition": {
+          "field": "org_type",
+          "value": "crypto_fund"
+        },
+        "tags": ["FUND", "HIGH_PRIORITY"]
+      },
+      {
+        "condition": {
+          "field": "org_type",
+          "value": "custodian"
+        },
+        "tags": ["CUSTODY", "HIGH_PRIORITY"]
+      },
+      {
+        "condition": {
+          "field": "org_type",
+          "value": "otc_desk"
+        },
+        "tags": ["OTC", "HIGH_PRIORITY"]
+      },
+      {
+        "condition": {
+          "field": "org_type",
+          "value": "prime_broker"
+        },
+        "tags": ["PRIME", "HIGH_PRIORITY"]
+      },
+      {
+        "condition": {
+          "field": "org_type",
+          "value": "corporate_treasury"
+        },
+        "tags": ["TREASURY", "MEDIUM_PRIORITY"]
+      },
+      {
+        "condition": {
+          "field": "aum_bracket",
+          "value": "over_1b"
+        },
+        "tags": ["ENTERPRISE", "CRITICAL_PRIORITY"]
+      },
+      {
+        "condition": {
+          "field": "aum_bracket",
+          "value": "500m_1b"
+        },
+        "tags": ["LARGE", "HIGH_PRIORITY"]
+      },
+      {
+        "condition": {
+          "field": "timeline",
+          "value": "immediate"
+        },
+        "tags": ["URGENT", "CRITICAL_PRIORITY"]
+      },
+      {
+        "condition": {
+          "field": "role",
+          "value": "ceo"
+        },
+        "tags": ["DECISION_MAKER"]
+      },
+      {
+        "condition": {
+          "field": "role",
+          "value": "cto"
+        },
+        "tags": ["TECHNICAL_BUYER"]
+      },
+      {
+        "condition": {
+          "field": "role",
+          "value": "compliance_officer"
+        },
+        "tags": ["COMPLIANCE_BUYER"]
+      },
+      {
+        "condition": {
+          "field": "compliance_requirements",
+          "contains": "soc2"
+        },
+        "tags": ["SOC2_REQUIRED"]
+      },
+      {
+        "condition": {
+          "field": "compliance_requirements",
+          "contains": "sec"
+        },
+        "tags": ["SEC_REGULATED"]
+      }
+    ]
+  },
+  "notifications": {
+    "internal": {
+      "email": "beta@ciphervault.com",
+      "slack": {
+        "webhook": "SLACK_WEBHOOK_URL",
+        "channel": "#beta-signups"
+      },
+      "highPriorityAlert": {
+        "conditions": [
+          "CRITICAL_PRIORITY",
+          "ENTERPRISE",
+          "URGENT"
+        ],
+        "recipients": ["sales@ciphervault.com", "founders@ciphervault.com"]
+      }
+    },
+    "applicant": {
+      "confirmationEmail": true,
+      "template": "waitlist_confirmation"
+    }
+  },
+  "integrations": {
+    "crm": {
+      "provider": "hubspot",
+      "syncFields": true,
+      "createDeal": true
+    },
+    "analytics": {
+      "googleAnalytics": true,
+      "mixpanel": true,
+      "segment": true
+    }
+  }
+}

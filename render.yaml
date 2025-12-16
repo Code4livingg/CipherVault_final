@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: ciphervault-api
+    env: node
+    region: oregon
+    plan: starter
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SIDESHIFT_API_KEY
+        sync: false
+      - key: BITCOIN_RPC_URL
+        sync: false
+      - key: ETHEREUM_RPC_URL
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://ciphervault.app
+    healthCheckPath: /api/health
+    autoDeploy: true
+    
+  - type: redis
+    name: ciphervault-cache
+    plan: starter
+    ipAllowList: []
+    
+databases:
+  - name: ciphervault-db
+    databaseName: ciphervault
+    user: ciphervault
+    plan: starter
+    region: oregon
