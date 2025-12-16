@@ -15,7 +15,7 @@ app.use(express.json())
 app.use('/api/vault', vaultRoutes)
 app.use('/api/webhook', webhookRoutes)
 
-app.get('/health', (req: express.Request, res: express.Response) => {
+app.get('/health', (req: any, res: any) => {
   res.json({ status: 'ok' })
 })
 

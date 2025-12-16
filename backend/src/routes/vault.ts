@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from 'express'
+import { Router } from 'express'
 import { vaultService } from '../services/vaultService'
 import { proposalService } from '../services/proposalService'
 import { CreateVaultRequest, CreateUnlockProposalRequest, ApproveProposalRequest } from '../types/vault'
@@ -6,7 +6,7 @@ import { CreateVaultRequest, CreateUnlockProposalRequest, ApproveProposalRequest
 const router = Router()
 
 // Create new vault
-router.post('/create', async (req: express.Request, res: express.Response) => {
+router.post('/create', async (req: any, res: any) => {
   try {
     const request: CreateVaultRequest = req.body
     
@@ -28,7 +28,7 @@ router.post('/create', async (req: express.Request, res: express.Response) => {
 })
 
 // Get vault by ID
-router.get('/:id', async (req: express.Request, res: express.Response) => {
+router.get('/:id', async (req: any, res: any) => {
   try {
     const vault = await vaultService.getVault(req.params.id)
     
@@ -44,7 +44,7 @@ router.get('/:id', async (req: express.Request, res: express.Response) => {
 })
 
 // Update vault deposits (webhook endpoint for monitoring deposits)
-router.post('/:id/deposits', async (req: express.Request, res: express.Response) => {
+router.post('/:id/deposits', async (req: any, res: any) => {
   try {
     const { amount } = req.body
     
@@ -66,7 +66,7 @@ router.post('/:id/deposits', async (req: express.Request, res: express.Response)
 })
 
 // Approve unlock (key holder approval)
-router.post('/:id/approve', async (req: express.Request, res: express.Response) => {
+router.post('/:id/approve', async (req: any, res: any) => {
   try {
     const { holderId } = req.body
     
@@ -88,7 +88,7 @@ router.post('/:id/approve', async (req: express.Request, res: express.Response) 
 })
 
 // Create unlock proposal
-router.post('/:id/proposal', async (req: express.Request, res: express.Response) => {
+router.post('/:id/proposal', async (req: any, res: any) => {
   try {
     const request: CreateUnlockProposalRequest = req.body
     
@@ -110,7 +110,7 @@ router.post('/:id/proposal', async (req: express.Request, res: express.Response)
 })
 
 // Get unlock proposal
-router.get('/:id/proposal', async (req: express.Request, res: express.Response) => {
+router.get('/:id/proposal', async (req: any, res: any) => {
   try {
     const proposal = await proposalService.getProposalByVaultId(req.params.id)
     
@@ -126,7 +126,7 @@ router.get('/:id/proposal', async (req: express.Request, res: express.Response) 
 })
 
 // Approve proposal
-router.post('/:id/proposal/approve', async (req: express.Request, res: express.Response) => {
+router.post('/:id/proposal/approve', async (req: any, res: any) => {
   try {
     const { holderId } = req.body
     
@@ -148,7 +148,7 @@ router.post('/:id/proposal/approve', async (req: express.Request, res: express.R
 })
 
 // Execute proposal
-router.post('/:id/proposal/execute', async (req: express.Request, res: express.Response) => {
+router.post('/:id/proposal/execute', async (req: any, res: any) => {
   try {
     const proposal = await proposalService.getProposalByVaultId(req.params.id)
     if (!proposal) {
