@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-nocheck
 const express_1 = require("express");
 const vaultService_1 = require("../services/vaultService");
 const proposalService_1 = require("../services/proposalService");

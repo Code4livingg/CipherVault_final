@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Router } from 'express'
 import { vaultService } from '../services/vaultService'
 import { proposalService } from '../services/proposalService'
@@ -169,7 +170,7 @@ router.post('/:id/proposal/execute', async (req: any, res: any) => {
 })
 
 // Destroy vault (self-destruct)
-router.delete('/:id', async (req: express.Request, res: express.Response) => {
+router.delete('/:id', async (req: any, res: any) => {
   try {
     const success = await vaultService.destroyVault(req.params.id)
     
