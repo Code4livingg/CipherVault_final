@@ -1,8 +1,8 @@
 // Self-destruct mechanism for expired vaults
 // Run this as a cron job or scheduled task
 
-import { vaultStore } from '../storage/vaultStore.js'
-import { vaultService } from '../services/vaultService.js'
+import { vaultStore } from '../storage/vaultStore'
+import { vaultService } from '../services/vaultService'
 
 async function checkExpiredVaults() {
   console.log('Checking for expired vaults...')
@@ -115,7 +115,7 @@ async function selfDestruct() {
 }
 
 // Run if executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (require.main === module) {
   selfDestruct()
 }
 

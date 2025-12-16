@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express'
-import { vaultService } from '../services/vaultService.js'
-import { proposalService } from '../services/proposalService.js'
-import { CreateVaultRequest, CreateUnlockProposalRequest, ApproveProposalRequest } from '../types/vault.js'
+import { vaultService } from '../services/vaultService'
+import { proposalService } from '../services/proposalService'
+import { CreateVaultRequest, CreateUnlockProposalRequest, ApproveProposalRequest } from '../types/vault'
 
 const router = Router()
 

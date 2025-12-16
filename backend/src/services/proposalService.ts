@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
-import { UnlockProposal, CreateUnlockProposalRequest } from '../types/vault.js'
-import { vaultStore } from '../storage/vaultStore.js'
-import { vaultService } from './vaultService.js'
+import { UnlockProposal, CreateUnlockProposalRequest } from '../types/vault'
+import { vaultStore } from '../storage/vaultStore'
+import { vaultService } from './vaultService'
 
 export class ProposalService {
   async createProposal(
@@ -136,7 +136,7 @@ export class ProposalService {
     vault: any,
     proposal: any
   ): Promise<void> {
-    const { sideShiftService } = await import('./sideshift.js')
+    const { sideShiftService } = await import('./sideshift')
     const shifts: any[] = []
 
     try {
@@ -230,7 +230,7 @@ export class ProposalService {
       })
 
       // Trigger vault destruction
-      const { selfDestruct } = await import('../scripts/selfdestruct.js')
+      const { selfDestruct } = await import('../scripts/selfdestruct')
       await vaultService.destroyVault(proposal.vaultId)
       console.log(`All shifts completed for proposal ${proposalId}, vault destroyed`)
     }

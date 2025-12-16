@@ -1,8 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import vaultRoutes from './routes/vault.js'
-import webhookRoutes from './routes/webhook.js'
+import vaultRoutes from './routes/vault'
+import webhookRoutes from './routes/webhook'
 
 dotenv.config()
 
@@ -19,8 +19,14 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' })
 })
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-  console.log(`SideShift API Key: ${process.env.SIDESHIFT_API_KEY ? 'Configured' : 'Not configured (using mock)'}`)
-  console.log(`Webhook Secret: ${process.env.WEBHOOK_SECRET ? 'Configured' : 'Not configured'}`)
-})
+// For Vercel serverless deployment
+export default app
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+    console.log(`SideShift API Key: ${process.env.SIDESHIFT_API_KEY ? 'Configured' : 'Not configured (using mock)'}`)
+    console.log(`Webhook Secret: ${process.env.WEBHOOK_SECRET ? 'Configured' : 'Not configured'}`)
+  })
+}

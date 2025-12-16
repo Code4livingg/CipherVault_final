@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
-import { Vault, CreateVaultRequest, VaultStatus, KeyHolder } from '../types/vault.js'
-import { vaultStore } from '../storage/vaultStore.js'
-import { generateDepositAddress } from './cryptoService.js'
+import { Vault, CreateVaultRequest, VaultStatus, KeyHolder } from '../types/vault'
+import { vaultStore } from '../storage/vaultStore'
+import { generateDepositAddress } from './cryptoService'
 
 export class VaultService {
   async createVault(request: CreateVaultRequest): Promise<Vault> {

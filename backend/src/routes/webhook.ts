@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
-import { proposalService } from '../services/proposalService.js'
-import { vaultStore } from '../storage/vaultStore.js'
+import { proposalService } from '../services/proposalService'
+import { vaultStore } from '../storage/vaultStore'
 
 const router = Router()
 

@@ -1,4 +1,4 @@
-import { Vault, UnlockProposal } from '../types/vault.js'
+import { Vault, UnlockProposal } from '../types/vault'
 
 // In-memory storage (replace with database in production)
 class VaultStore {
