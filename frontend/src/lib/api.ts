@@ -1,9 +1,8 @@
 import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
-// Force demo mode in production unless explicitly disabled
-const DEMO_MODE = import.meta.env.VITE_DEMO_MODE !== 'false' && 
-                  (import.meta.env.PROD || !import.meta.env.VITE_API_URL || import.meta.env.VITE_DEMO_MODE === 'true')
+// Always use demo mode unless explicitly disabled
+const DEMO_MODE = true // Force demo mode for now
 
 // Debug logging
 console.log('🔧 API Configuration:', {
