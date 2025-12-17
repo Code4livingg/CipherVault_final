@@ -6,6 +6,7 @@ import FloatingInput from '../components/vault-steps/FloatingInput'
 import PageTransition from '../components/ui/PageTransition'
 import FloatingPanel from '../components/ui/FloatingPanel'
 import GlobalCinematicEnvironment from '../components/environment/GlobalCinematicEnvironment'
+import { createVault, handleApiError } from '../lib/api'
 
 type Step = 'details' | 'keys' | 'settings' | 'review'
 
@@ -58,7 +59,7 @@ export default function CreateVault() {
     setError(null)
 
     try {
-      const { createVault } = await import('../lib/api')
+
       
       const vault = await createVault({
         name: vaultData.name,
@@ -78,7 +79,7 @@ export default function CreateVault() {
 
       navigate(`/vault/${vault.id}`)
     } catch (err: any) {
-      const { handleApiError } = await import('../lib/api')
+
       setError(handleApiError(err))
       setIsCreating(false)
     }
