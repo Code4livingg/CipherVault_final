@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true' || !import.meta.env.VITE_API_URL
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -116,8 +117,47 @@ export interface CreateProposalRequest {
   expiryHours: number
 }
 
+// Mock data for demo mode
+const mockVault: Vault = {
+  id: 'demo-vault-123',
+  name: 'Demo Vault',
+  description: 'This is a demonstration vault',
+  status: 'ready',
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  keyHolders: [
+    {
+      id: 'holder-1',
+      name: 'Alice Johnson',
+      email: 'alice@example.com',
+      walletAddress: '0x742d35Cc6634C0532925a3b8D4C0532925a3b8D4',
+      approved: true,
+      approvedAt: new Date().toISOString()
+    },
+    {
+      id: 'holder-2', 
+      name: 'Bob Smith',
+      email: 'bob@example.com',
+      walletAddress: '0x8D4C0532925a3b8D4C0532925a3b8D4C0532925a',
+      approved: false
+    }
+  ],
+  threshold: 2,
+  totalDeposits: '1.5',
+  sourceAsset: 'BTC',
+  targetAsset: 'ETH',
+  depositAddress: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+  supportedChains: ['Bitcoin', 'Ethereum'],
+  expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+  autoSwap: true
+}
+
 // Health check function
 export async function checkApiHealth(): Promise<{ status: string; url: string }> {
+  if (DEMO_MODE) {
+    return { status: 'demo', url: 'Demo Mode - No Backend Required' }
+  }
+  
   try {
     await axios.get(`${API_BASE_URL.replace('/api', '')}/health`, { timeout: 5000 })
     return { status: 'connected', url: API_BASE_URL }
@@ -129,21 +169,70 @@ export async function checkApiHealth(): Promise<{ status: string; url: string }>
 
 // API Functions
 export async function createVault(data: CreateVaultRequest): Promise<Vault> {
+  if (DEMO_MODE) {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    const newVault: Vault = {
+      ...mockVault,
+      id: `vault-${Date.now()}`,
+      name: data.name,
+      description: data.description,
+      keyHolders: data.keyHolders.map((holder, index) => ({
+        id: `holder-${index + 1}`,
+        name: holder.name,
+        email: holder.email,
+        walletAddress: holder.walletAddress || `0x${Math.random().toString(16).substr(2, 40)}`,
+        approved: false
+      })),
+      threshold: data.threshold,
+      sourceAsset: data.sourceAsset,
+      targetAsset: data.targetAsset,
+      autoSwap: data.autoSwap,
+      status: 'created',
+      totalDeposits: '0'
+    }
+    
+    console.log('Demo: Created vault', newVault)
+    return newVault
+  }
+  
   const response = await api.post('/vault/create', data)
   return response.data
 }
 
 export async function getVault(id: string): Promise<Vault> {
+  if (DEMO_MODE) {
+    await new Promise(resolve => setTimeout(resolve, 500))
+    return { ...mockVault, id }
+  }
+  
   const response = await api.get(`/vault/${id}`)
   return response.data
 }
 
 export async function updateDeposits(id: string, amount: string): Promise<Vault> {
+  if (DEMO_MODE) {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    return { ...mockVault, id, totalDeposits: amount, status: 'ready' }
+  }
+  
   const response = await api.post(`/vault/${id}/deposits`, { amount })
   return response.data
 }
 
 export async function approveUnlock(id: string, holderId: string): Promise<Vault> {
+  if (DEMO_MODE) {
+    await new Promise(resolve => setTimeout(resolve, 600))
+    const updatedVault = { ...mockVault, id }
+    updatedVault.keyHolders = updatedVault.keyHolders.map(holder => 
+      holder.id === holderId 
+        ? { ...holder, approved: true, approvedAt: new Date().toISOString() }
+        : holder
+    )
+    return updatedVault
+  }
+  
   const response = await api.post(`/vault/${id}/approve`, { holderId })
   return response.data
 }
@@ -152,11 +241,65 @@ export async function createProposal(
   vaultId: string,
   data: CreateProposalRequest
 ): Promise<UnlockProposal> {
+  if (DEMO_MODE) {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    const mockProposal: UnlockProposal = {
+      id: `proposal-${Date.now()}`,
+      vaultId,
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + data.expiryHours * 60 * 60 * 1000).toISOString(),
+      recipients: data.recipients,
+      approvals: [],
+      executed: false,
+      status: 'pending'
+    }
+    
+    return mockProposal
+  }
+  
   const response = await api.post(`/vault/${vaultId}/proposal`, data)
   return response.data
 }
 
 export async function getProposal(vaultId: string): Promise<UnlockProposal> {
+  if (DEMO_MODE) {
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    const mockProposal: UnlockProposal = {
+      id: `proposal-${vaultId}`,
+      vaultId,
+      createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      expiresAt: new Date(Date.now() + 22 * 60 * 60 * 1000).toISOString(),
+      recipients: [
+        {
+          address: '0x742d35Cc6634C0532925a3b8D4C0532925a3b8D4',
+          name: 'Treasury Wallet',
+          amount: '0.75',
+          percentage: 50,
+          targetAsset: 'ETH'
+        },
+        {
+          address: '0x8D4C0532925a3b8D4C0532925a3b8D4C0532925a',
+          name: 'Operations Wallet', 
+          amount: '0.75',
+          percentage: 50,
+          targetAsset: 'ETH'
+        }
+      ],
+      approvals: [
+        {
+          holderId: 'holder-1',
+          approvedAt: new Date(Date.now() - 30 * 60 * 1000).toISOString()
+        }
+      ],
+      executed: false,
+      status: 'pending'
+    }
+    
+    return mockProposal
+  }
+  
   const response = await api.get(`/vault/${vaultId}/proposal`)
   return response.data
 }
@@ -165,16 +308,44 @@ export async function approveProposal(
   vaultId: string,
   holderId: string
 ): Promise<UnlockProposal> {
+  if (DEMO_MODE) {
+    await new Promise(resolve => setTimeout(resolve, 800))
+    
+    const proposal = await getProposal(vaultId)
+    proposal.approvals.push({
+      holderId,
+      approvedAt: new Date().toISOString()
+    })
+    
+    return proposal
+  }
+  
   const response = await api.post(`/vault/${vaultId}/proposal/approve`, { holderId })
   return response.data
 }
 
 export async function executeProposal(vaultId: string): Promise<{ success: boolean; message: string }> {
+  if (DEMO_MODE) {
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    return { 
+      success: true, 
+      message: 'Demo: Proposal execution initiated. Crypto swaps are being processed.' 
+    }
+  }
+  
   const response = await api.post(`/vault/${vaultId}/proposal/execute`)
   return response.data
 }
 
 export async function destroyVault(id: string): Promise<{ success: boolean; message: string }> {
+  if (DEMO_MODE) {
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    return { 
+      success: true, 
+      message: 'Demo: Vault has been securely destroyed and all data wiped.' 
+    }
+  }
+  
   const response = await api.delete(`/vault/${id}`)
   return response.data
 }
