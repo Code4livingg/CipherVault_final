@@ -1,13 +1,35 @@
 import axios from 'axios'
 
-const API_BASE_URL = 'http://localhost:3001/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  timeout: 10000 // 10 second timeout
 })
+
+// Add request interceptor for debugging
+api.interceptors.request.use(
+  (config) => {
+    console.log(`API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`)
+    return config
+  },
+  (error) => {
+    console.error('API Request Error:', error)
+    return Promise.reject(error)
+  }
+)
+
+// Add response interceptor for error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Response Error:', error.response?.data || error.message)
+    return Promise.reject(error)
+  }
+)
 
 // Types
 export interface CreateVaultRequest {
@@ -92,6 +114,17 @@ export interface CreateProposalRequest {
     targetAsset: string
   }>
   expiryHours: number
+}
+
+// Health check function
+export async function checkApiHealth(): Promise<{ status: string; url: string }> {
+  try {
+    await axios.get(`${API_BASE_URL.replace('/api', '')}/health`, { timeout: 5000 })
+    return { status: 'connected', url: API_BASE_URL }
+  } catch (error) {
+    console.warn('API health check failed:', error)
+    return { status: 'disconnected', url: API_BASE_URL }
+  }
 }
 
 // API Functions
