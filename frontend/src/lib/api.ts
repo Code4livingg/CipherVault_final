@@ -221,6 +221,7 @@ export async function createVault(data: CreateVaultRequest): Promise<Vault> {
     return newVault
   }
   
+  if (!api) throw new Error('API not available in demo mode')
   const response = await api.post('/vault/create', data)
   return response.data
 }
@@ -231,6 +232,7 @@ export async function getVault(id: string): Promise<Vault> {
     return { ...mockVault, id }
   }
   
+  if (!api) throw new Error('API not available in demo mode')
   const response = await api.get(`/vault/${id}`)
   return response.data
 }
@@ -241,6 +243,7 @@ export async function updateDeposits(id: string, amount: string): Promise<Vault>
     return { ...mockVault, id, totalDeposits: amount, status: 'ready' }
   }
   
+  if (!api) throw new Error('API not available in demo mode')
   const response = await api.post(`/vault/${id}/deposits`, { amount })
   return response.data
 }
@@ -257,6 +260,7 @@ export async function approveUnlock(id: string, holderId: string): Promise<Vault
     return updatedVault
   }
   
+  if (!api) throw new Error('API not available in demo mode')
   const response = await api.post(`/vault/${id}/approve`, { holderId })
   return response.data
 }
@@ -282,6 +286,7 @@ export async function createProposal(
     return mockProposal
   }
   
+  if (!api) throw new Error('API not available in demo mode')
   const response = await api.post(`/vault/${vaultId}/proposal`, data)
   return response.data
 }
@@ -324,6 +329,7 @@ export async function getProposal(vaultId: string): Promise<UnlockProposal> {
     return mockProposal
   }
   
+  if (!api) throw new Error('API not available in demo mode')
   const response = await api.get(`/vault/${vaultId}/proposal`)
   return response.data
 }
@@ -344,6 +350,7 @@ export async function approveProposal(
     return proposal
   }
   
+  if (!api) throw new Error('API not available in demo mode')
   const response = await api.post(`/vault/${vaultId}/proposal/approve`, { holderId })
   return response.data
 }
@@ -357,6 +364,7 @@ export async function executeProposal(vaultId: string): Promise<{ success: boole
     }
   }
   
+  if (!api) throw new Error('API not available in demo mode')
   const response = await api.post(`/vault/${vaultId}/proposal/execute`)
   return response.data
 }
@@ -370,6 +378,7 @@ export async function destroyVault(id: string): Promise<{ success: boolean; mess
     }
   }
   
+  if (!api) throw new Error('API not available in demo mode')
   const response = await api.delete(`/vault/${id}`)
   return response.data
 }
