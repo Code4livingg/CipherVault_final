@@ -41,8 +41,8 @@ function AppContent() {
       </Routes>
 
       {/* Global Demo Mode Banner */}
-      <div className="fixed top-0 left-0 right-0 z-[9999] bg-yellow-500 text-black text-center py-2 font-bold">
-        🎭 DEMO MODE v2.0 - Using Mock Data (No Backend Required)
+      <div className="fixed top-0 left-0 right-0 z-[9999] bg-red-500 text-white text-center py-2 font-bold">
+        🚨 FORCED DEMO MODE v3.0 - NO NETWORK REQUESTS ALLOWED 🚨
       </div>
 
       {/* Global Toast Notification System */}

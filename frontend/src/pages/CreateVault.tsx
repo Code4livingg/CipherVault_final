@@ -273,10 +273,13 @@ export default function CreateVault() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                         </svg>
                         <input
+                          id={`key-holder-${index}`}
+                          name={`key-holder-${index}`}
                           type="text"
                           value={holder}
                           onChange={(e) => updateHolder(index, e.target.value)}
                           placeholder="Email or wallet address"
+                          aria-label={`Key holder ${index + 1}`}
                           className="flex-1 bg-transparent text-white border-none outline-none placeholder:text-[#64748B] font-body"
                         />
                         {vaultData.holders.length > 1 && (
@@ -302,15 +305,18 @@ export default function CreateVault() {
 
                   {/* Threshold slider */}
                   <div className="mt-8 p-6 bg-[#0A0F14]/50 border border-[#1E293B] rounded-lg">
-                    <label className="block text-[#E2E8F0] mb-4 font-body text-sm">
+                    <label htmlFor="threshold-slider" className="block text-[#E2E8F0] mb-4 font-body text-sm">
                       Approval Threshold: <span className="text-[#3B82F6] font-mono font-bold">{vaultData.threshold}/{vaultData.holders.length}</span>
                     </label>
                     <input
+                      id="threshold-slider"
+                      name="threshold-slider"
                       type="range"
                       min="1"
                       max={vaultData.holders.length}
                       value={vaultData.threshold}
                       onChange={(e) => updateVaultData({ threshold: parseInt(e.target.value) })}
+                      aria-label="Approval threshold slider"
                       className="w-full h-2 bg-[#1E293B] rounded-lg appearance-none cursor-pointer accent-[#3B82F6]"
                     />
                   </div>

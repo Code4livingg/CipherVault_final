@@ -1,23 +1,28 @@
 import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
-// Always use demo mode unless explicitly disabled
-const DEMO_MODE = true // Force demo mode for now - v2.0
-const VERSION = '2.0.1'
+// FORCE DEMO MODE - NEVER MAKE NETWORK REQUESTS
+const DEMO_MODE = true // HARDCODED DEMO MODE - v3.0
+const VERSION = '3.0.0'
+const FORCE_DEMO = true // Extra safety
 
 // Debug logging
 console.log(`🔧 API Configuration v${VERSION}:`, {
   VERSION,
   API_BASE_URL,
   DEMO_MODE,
+  FORCE_DEMO,
   VITE_API_URL: import.meta.env.VITE_API_URL,
   VITE_DEMO_MODE: import.meta.env.VITE_DEMO_MODE,
   NODE_ENV: import.meta.env.NODE_ENV,
   MODE: import.meta.env.MODE
 })
 
-// Force demo mode alert for debugging
-if (DEMO_MODE) {
+// ALERT: Force demo mode
+console.error('🚨 FORCED DEMO MODE v3.0 - NO NETWORK REQUESTS ALLOWED')
+alert('🎭 CipherVault v3.0 - Demo Mode Active (No Backend Required)')
+
+if (DEMO_MODE || FORCE_DEMO) {
   console.log('🎭 DEMO MODE ACTIVE - NO NETWORK REQUESTS WILL BE MADE')
 } else {
   console.log('🌐 LIVE MODE - WILL ATTEMPT API CONNECTIONS')
@@ -29,8 +34,8 @@ if (DEMO_MODE) {
   console.log('🌐 Live Mode - Connecting to API at:', API_BASE_URL)
 }
 
-// Only create axios instance if not in demo mode
-const api = DEMO_MODE ? null : axios.create({
+// NEVER create axios instance in demo mode
+const api = (DEMO_MODE || FORCE_DEMO) ? null : axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
@@ -39,7 +44,7 @@ const api = DEMO_MODE ? null : axios.create({
 })
 
 // Add interceptors only if not in demo mode
-if (!DEMO_MODE && api) {
+if (!DEMO_MODE && !FORCE_DEMO && api) {
   // Add request interceptor for debugging
   api.interceptors.request.use(
     (config) => {
@@ -184,7 +189,7 @@ const mockVault: Vault = {
 
 // Health check function
 export async function checkApiHealth(): Promise<{ status: string; url: string }> {
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     return { status: 'demo', url: 'Demo Mode - No Backend Required' }
   }
   
@@ -201,7 +206,7 @@ export async function checkApiHealth(): Promise<{ status: string; url: string }>
 export async function createVault(data: CreateVaultRequest): Promise<Vault> {
   console.log('createVault called with DEMO_MODE:', DEMO_MODE)
   
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     console.log('Using demo mode for createVault')
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -236,7 +241,7 @@ export async function createVault(data: CreateVaultRequest): Promise<Vault> {
 }
 
 export async function getVault(id: string): Promise<Vault> {
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     await new Promise(resolve => setTimeout(resolve, 500))
     return { ...mockVault, id }
   }
@@ -247,7 +252,7 @@ export async function getVault(id: string): Promise<Vault> {
 }
 
 export async function updateDeposits(id: string, amount: string): Promise<Vault> {
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     await new Promise(resolve => setTimeout(resolve, 800))
     return { ...mockVault, id, totalDeposits: amount, status: 'ready' }
   }
@@ -258,7 +263,7 @@ export async function updateDeposits(id: string, amount: string): Promise<Vault>
 }
 
 export async function approveUnlock(id: string, holderId: string): Promise<Vault> {
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     await new Promise(resolve => setTimeout(resolve, 600))
     const updatedVault = { ...mockVault, id }
     updatedVault.keyHolders = updatedVault.keyHolders.map(holder => 
@@ -278,7 +283,7 @@ export async function createProposal(
   vaultId: string,
   data: CreateProposalRequest
 ): Promise<UnlockProposal> {
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     await new Promise(resolve => setTimeout(resolve, 1000))
     
     const mockProposal: UnlockProposal = {
@@ -301,7 +306,7 @@ export async function createProposal(
 }
 
 export async function getProposal(vaultId: string): Promise<UnlockProposal> {
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     await new Promise(resolve => setTimeout(resolve, 500))
     
     const mockProposal: UnlockProposal = {
@@ -347,7 +352,7 @@ export async function approveProposal(
   vaultId: string,
   holderId: string
 ): Promise<UnlockProposal> {
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     await new Promise(resolve => setTimeout(resolve, 800))
     
     const proposal = await getProposal(vaultId)
@@ -365,7 +370,7 @@ export async function approveProposal(
 }
 
 export async function executeProposal(vaultId: string): Promise<{ success: boolean; message: string }> {
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     await new Promise(resolve => setTimeout(resolve, 2000))
     return { 
       success: true, 
@@ -379,7 +384,7 @@ export async function executeProposal(vaultId: string): Promise<{ success: boole
 }
 
 export async function destroyVault(id: string): Promise<{ success: boolean; message: string }> {
-  if (DEMO_MODE) {
+  if (DEMO_MODE || FORCE_DEMO) {
     await new Promise(resolve => setTimeout(resolve, 1500))
     return { 
       success: true, 

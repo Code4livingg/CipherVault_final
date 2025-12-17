@@ -8,6 +8,7 @@ interface FloatingInputProps {
   placeholder?: string
   multiline?: boolean
   rows?: number
+  id?: string
 }
 
 export default function FloatingInput({
@@ -16,16 +17,19 @@ export default function FloatingInput({
   onChange,
   placeholder,
   multiline = false,
-  rows = 1
+  rows = 1,
+  id
 }: FloatingInputProps) {
   const [isFocused, setIsFocused] = useState(false)
   const hasValue = value.length > 0
+  const inputId = id || `input-${label.toLowerCase().replace(/\s+/g, '-')}`
 
   const InputComponent = multiline ? 'textarea' : 'input'
 
   return (
     <div className="relative mb-8">
       <motion.label
+        htmlFor={inputId}
         animate={{
           y: isFocused || hasValue ? -24 : 0,
           scale: isFocused || hasValue ? 0.85 : 1,
@@ -38,6 +42,8 @@ export default function FloatingInput({
       </motion.label>
 
       <InputComponent
+        id={inputId}
+        name={inputId}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => setIsFocused(true)}
