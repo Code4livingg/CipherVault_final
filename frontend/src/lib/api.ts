@@ -2,10 +2,12 @@ import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 // Always use demo mode unless explicitly disabled
-const DEMO_MODE = true // Force demo mode for now
+const DEMO_MODE = true // Force demo mode for now - v2.0
+const VERSION = '2.0.1'
 
 // Debug logging
-console.log('🔧 API Configuration:', {
+console.log(`🔧 API Configuration v${VERSION}:`, {
+  VERSION,
   API_BASE_URL,
   DEMO_MODE,
   VITE_API_URL: import.meta.env.VITE_API_URL,
@@ -13,6 +15,13 @@ console.log('🔧 API Configuration:', {
   NODE_ENV: import.meta.env.NODE_ENV,
   MODE: import.meta.env.MODE
 })
+
+// Force demo mode alert for debugging
+if (DEMO_MODE) {
+  console.log('🎭 DEMO MODE ACTIVE - NO NETWORK REQUESTS WILL BE MADE')
+} else {
+  console.log('🌐 LIVE MODE - WILL ATTEMPT API CONNECTIONS')
+}
 
 if (DEMO_MODE) {
   console.log('🎭 Demo Mode is ENABLED - Using mock data')

@@ -40,6 +40,11 @@ function AppContent() {
         <Route path="/org/members" element={<MembersDirectory />} />
       </Routes>
 
+      {/* Global Demo Mode Banner */}
+      <div className="fixed top-0 left-0 right-0 z-[9999] bg-yellow-500 text-black text-center py-2 font-bold">
+        🎭 DEMO MODE v2.0 - Using Mock Data (No Backend Required)
+      </div>
+
       {/* Global Toast Notification System */}
       <ToastManager
         toasts={toasts}
