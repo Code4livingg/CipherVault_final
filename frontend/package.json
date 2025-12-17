@@ -1,12 +1,14 @@
 {
-  "name": "frontend",
+  "name": "ciphervault-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "vercel-install": "npm install --ignore-scripts",
+    "postinstall": "echo 'Frontend dependencies installed successfully'"
   },
   "dependencies": {
     "react": "^18.3.1",
