@@ -147,6 +147,17 @@ export default function CreateVault() {
         <GlobalCinematicEnvironment />
         <CinematicBackground />
 
+      {/* Demo Mode Banner */}
+      {(import.meta.env.VITE_DEMO_MODE !== 'false') && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
+          <div className="bg-[#D1A954]/20 border border-[#D1A954]/50 rounded-lg px-4 py-2 backdrop-blur-sm">
+            <p className="text-[#D1A954] text-sm font-body font-medium">
+              🎭 Demo Mode - Using Mock Data
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Full-screen wizard container */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16">
         <AnimatePresence mode="wait" custom={direction}>

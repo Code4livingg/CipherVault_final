@@ -1,7 +1,25 @@
 import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
-const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === 'true' || !import.meta.env.VITE_API_URL
+// Force demo mode in production unless explicitly disabled
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE !== 'false' && 
+                  (import.meta.env.PROD || !import.meta.env.VITE_API_URL || import.meta.env.VITE_DEMO_MODE === 'true')
+
+// Debug logging
+console.log('🔧 API Configuration:', {
+  API_BASE_URL,
+  DEMO_MODE,
+  VITE_API_URL: import.meta.env.VITE_API_URL,
+  VITE_DEMO_MODE: import.meta.env.VITE_DEMO_MODE,
+  NODE_ENV: import.meta.env.NODE_ENV,
+  MODE: import.meta.env.MODE
+})
+
+if (DEMO_MODE) {
+  console.log('🎭 Demo Mode is ENABLED - Using mock data')
+} else {
+  console.log('🌐 Live Mode - Connecting to API at:', API_BASE_URL)
+}
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -169,7 +187,10 @@ export async function checkApiHealth(): Promise<{ status: string; url: string }>
 
 // API Functions
 export async function createVault(data: CreateVaultRequest): Promise<Vault> {
+  console.log('createVault called with DEMO_MODE:', DEMO_MODE)
+  
   if (DEMO_MODE) {
+    console.log('Using demo mode for createVault')
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000))
     
