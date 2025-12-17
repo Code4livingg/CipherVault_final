@@ -20,7 +20,8 @@ if (DEMO_MODE) {
   console.log('🌐 Live Mode - Connecting to API at:', API_BASE_URL)
 }
 
-const api = axios.create({
+// Only create axios instance if not in demo mode
+const api = DEMO_MODE ? null : axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
@@ -28,26 +29,29 @@ const api = axios.create({
   timeout: 10000 // 10 second timeout
 })
 
-// Add request interceptor for debugging
-api.interceptors.request.use(
-  (config) => {
-    console.log(`API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`)
-    return config
-  },
-  (error) => {
-    console.error('API Request Error:', error)
-    return Promise.reject(error)
-  }
-)
+// Add interceptors only if not in demo mode
+if (!DEMO_MODE && api) {
+  // Add request interceptor for debugging
+  api.interceptors.request.use(
+    (config) => {
+      console.log(`API Request: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`)
+      return config
+    },
+    (error) => {
+      console.error('API Request Error:', error)
+      return Promise.reject(error)
+    }
+  )
 
-// Add response interceptor for error handling
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    console.error('API Response Error:', error.response?.data || error.message)
-    return Promise.reject(error)
-  }
-)
+  // Add response interceptor for error handling
+  api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      console.error('API Response Error:', error.response?.data || error.message)
+      return Promise.reject(error)
+    }
+  )
+}
 
 // Types
 export interface CreateVaultRequest {
